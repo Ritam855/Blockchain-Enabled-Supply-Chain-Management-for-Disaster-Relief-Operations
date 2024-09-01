@@ -1,0 +1,34 @@
+/**
+ * New query file
+ */
+query Q1 {
+ description: "Select all reliefitem"
+ statement: SELECT org.dro.network.reliefitem
+}
+
+query Q2 {
+ description: "Select all requests"
+ statement: SELECT org.dro.network.request
+}
+
+query Q3 {
+ description: "Select all reliefcamp"
+ statement: SELECT org.dro.network.reliefcamp
+}
+
+query Q4 {
+ description: "Select all osdma"
+ statement: SELECT org.dro.network.osdma
+}
+
+query Q5 {
+ description: "Select all distributors"
+ statement: SELECT org.dro.network.distributor
+}
+
+
+
+query Q7 {
+ description: "Select all civilians"
+ statement: SELECT org.dro.network.civilians
+}

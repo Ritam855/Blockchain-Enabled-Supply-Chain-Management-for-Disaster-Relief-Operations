@@ -1,0 +1,147 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule Readreliefitem {
+ description: "All participants can read all the relief item available in network "
+ participant(p): "org.dro.network.*"
+ operation: ALL
+ resource(r): "org.dro.network.reliefitem"
+ condition: (r.owner.getIdentifier() == r.owner.getIdentifier())
+ action: ALLOW
+}
+
+rule VendorReadrequest {
+ description: "All vendors can read their own requests"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.request"
+ condition: (r.vendor.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule OrdererReadrequest {
+ description: "All orderers can read their own requests"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.request"
+ condition: (r.orderer.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule CreateTransferreliefitem{
+ description: "All participants can access Transferreliefitem transaction"
+ participant: "org.dro.network.*"
+ operation: CREATE
+ resource: "org.dro.network.Transferreliefitem"
+ action: ALLOW
+}
+
+rule OnlyTransferByTransferreliefitem {
+ description: "Allow all participants to transfer its own reliefitem by Transferreliefitem"
+ participant(p): "org.dro.network.*"
+ operation: UPDATE
+ resource(r): "org.dro.network.*"
+ transaction(tx): "org.dro.network.Transferreliefitem"
+ condition: (r.owner.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule ReadOwnTransactionRecords {
+ description: "Grant all participants to read their own transaction record"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.Transferreliefitem"
+ condition: (r.issuer.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule ReadOwnTransactionRecordsNewOwner {
+ description: "Grant new owner to read their own transaction records"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.Transferreliefitem"
+ condition: (r.newOwner.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+ rule CreateOwnResource {
+ description: "Grant all partcipants to create its own resource"
+ participant(p): "org.dro.network.*"
+ operation: CREATE
+ resource(r): "org.dro.network.reliefitem"
+ condition: (r.owner.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule CreateOwnrequest{
+ description: "Grant all partcipants to create request"
+ participant(p): "org.dro.network.*"
+ operation: CREATE
+ resource(r): "org.dro.network.request"
+ condition: (r.orderer.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule CreateInitiaterequest {
+ description: "All participants can access Inititaterequest transaction"
+ participant: "org.dro.network.*"
+ operation: CREATE
+ resource: "org.dro.network.Initiaterequest"
+ action: ALLOW
+}
+
+
+rule VendorCanReadTransaction {
+ description: "Grant all vendors to read their own transaction records"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.Initiaterequest"
+ condition: (r.vendor.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
+rule OrdererCanReadTransaction {
+ description: "Grant all vendors to read their own transaction records"
+ participant(p): "org.dro.network.*"
+ operation: READ
+ resource(r): "org.dro.network.Initiaterequest"
+ condition: (r.orderer.getIdentifier() == p.getIdentifier())
+ action: ALLOW
+}
+
